@@ -1,0 +1,87 @@
+{
+  "advisor": {
+    "name": "Pepe Leyva",
+    "subtitle": "Especialista en Planes de Vida",
+    "whatsapp": "5588048778",
+    "cta": "Mándame WHA"
+  },
+  "prospect": {
+    "name": "VANCHO",
+    "age": 54,
+    "sex": "M",
+    "smoker": "No especificado"
+  },
+  "quote": {
+    "insurer": "MAPFRE",
+    "product": "Dotal 15 años",
+    "planType": "Seguro dotal mixto",
+    "quoteNumber": "2610300006503",
+    "quoteDate": "2026-07-07",
+    "currency": "UDI",
+    "termYears": 15,
+    "paymentTermYears": 15
+  },
+  "projection": {
+    "baseUnitValue": 8.81,
+    "annualGrowthRate": 0.045,
+    "manualUnitLabel": null,
+    "manualUnitRate": null
+  },
+  "benefits": {
+    "sumAssured": 56042,
+    "disabilityWaiver": {
+      "included": true,
+      "title": "Exención de primas por invalidez",
+      "explanation": "Si MAPFRE reconoce una invalidez total y permanente cubierta, deja de cobrar las primas básicas del plan, sujeto al dictamen, periodo de espera y condiciones de la póliza."
+    },
+    "disabilityPayment": {
+      "included": true,
+      "amount": 56042,
+      "title": "Pago por invalidez",
+      "explanation": "Si MAPFRE reconoce una invalidez total y permanente cubierta, paga la suma asegurada contratada para este beneficio."
+    },
+    "accidentalDeathAdditional": {
+      "included": true,
+      "amount": 56042,
+      "title": "Beneficio adicional por muerte accidental",
+      "explanation": "Si el fallecimiento ocurre como consecuencia directa de un accidente cubierto y cumple los requisitos de la póliza, se pagan 56,042 UDI adicionales."
+    },
+    "otherCoverages": []
+  },
+  "payments": {
+    "firstYearAnnual": 4065,
+    "firstReceipt": 415,
+    "regularReceipt": 350,
+    "regularReceiptCount": 11,
+    "fractionalLoadFactor": 1.05,
+    "annualPremiums": [
+      {"year":1,"age":54,"premium":4065},
+      {"year":2,"age":55,"premium":4000},
+      {"year":3,"age":56,"premium":4000},
+      {"year":4,"age":57,"premium":4000},
+      {"year":5,"age":58,"premium":4000},
+      {"year":6,"age":59,"premium":4000},
+      {"year":7,"age":60,"premium":4000},
+      {"year":8,"age":61,"premium":4000},
+      {"year":9,"age":62,"premium":4000},
+      {"year":10,"age":63,"premium":4000},
+      {"year":11,"age":64,"premium":4000},
+      {"year":12,"age":65,"premium":4000},
+      {"year":13,"age":66,"premium":3729},
+      {"year":14,"age":67,"premium":3729},
+      {"year":15,"age":68,"premium":3729}
+    ]
+  },
+  "milestones": [
+    {"year":3,"age":56,"sumAssured":56042,"annualPremium":4000,"rescue":7327,"paidUp":10166},
+    {"year":6,"age":59,"sumAssured":56042,"annualPremium":4000,"rescue":16864,"paidUp":21847},
+    {"year":9,"age":62,"sumAssured":56042,"annualPremium":4000,"rescue":27749,"paidUp":32877},
+    {"year":12,"age":65,"sumAssured":56042,"annualPremium":4000,"rescue":39392,"paidUp":43204},
+    {"year":15,"age":68,"sumAssured":56042,"annualPremium":3729,"rescue":56042,"paidUp":56042}
+  ],
+  "extraction": {
+    "confidence": 1,
+    "warnings": ["Ejemplo precargado a partir de la cotización MAPFRE proporcionada."],
+    "sourcePages": [1]
+  }
+}

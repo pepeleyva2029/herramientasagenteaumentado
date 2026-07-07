@@ -1,0 +1,19 @@
+{
+  "name": "herramientas-inteligentes-cotizaciones",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Sitio estático listo'",
+    "check": "node --check netlify/functions/parse-quote.mjs && node --check netlify/functions/quotes.mjs && node --check netlify/functions/public-quote.mjs && node --check netlify/functions/udi.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.9",
+    "@netlify/identity": "^1.2.0",
+    "openai": "^6.45.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^26.2.0"
+  }
+}

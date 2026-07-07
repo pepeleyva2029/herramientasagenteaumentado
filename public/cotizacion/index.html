@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#152A44" />
+  <title>Tu cotización | Pepe Leyva</title>
+  <link rel="stylesheet" href="/assets/quote.css" />
+</head>
+<body>
+  <div id="loading" class="loading-screen">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <h2>Preparando tu explicación</h2>
+      <p class="section-copy">Estamos organizando los datos de la cotización.</p>
+      <div id="loadError" class="error-box hidden"></div>
+    </div>
+  </div>
+
+  <div id="previewRibbon" class="preview-ribbon hidden">VISTA PREVIA</div>
+
+  <div id="app" class="hidden">
+    <header class="hero">
+      <div class="wrap">
+        <div class="topbar">
+          <div class="brand">
+            <span class="mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.6-2.8 8.2-7 10-4.2-1.8-7-5.4-7-10V6l7-3z"/><path d="M8.5 12l2.2 2.2 4.8-5"/></svg>
+            </span>
+            <span id="brandText">Pepe Leyva · Especialista en Planes de Vida</span>
+          </div>
+          <div class="pill" id="quotePill">Cotización personalizada</div>
+        </div>
+
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow" id="heroEyebrow">Plan de vida</div>
+            <h1>Protección hoy.<br>Ahorro para el futuro.</h1>
+            <p class="lead">Una explicación simple de tu cotización: cuánto pagas, qué recibes y cómo se comporta tu protección.</p>
+            <div class="hero-note" id="heroProjectionNote">● Proyección estimada</div>
+            <div class="hero-person" id="prospectGreeting"></div>
+          </div>
+          <div class="hero-card">
+            <div class="eyebrow">TU PROTECCIÓN</div>
+            <div class="big-number" id="heroSumAssured">—</div>
+            <div class="big-number money gold-money" id="heroSaPesos" style="font-size:1.8rem">—</div>
+            <div class="subtle" id="heroEquivalentLabel">Equivalente estimado en moneda nacional.</div>
+            <div class="divider" style="background:rgba(255,255,255,.18)"></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem"><span>Plazo</span><strong id="heroTerm">—</strong></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem;margin-top:8px"><span>Edad inicial</span><strong id="heroAge">—</strong></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem;margin-top:8px"><span>Moneda</span><strong id="heroCurrency">—</strong></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="summary-grid" aria-label="Resumen del plan">
+        <article class="stat">
+          <div class="stat-label">Primer recibo</div>
+          <div class="stat-value" id="firstReceiptUnit">—</div>
+          <div class="stat-help money gold-money" id="firstReceiptNow">—</div>
+        </article>
+        <article class="stat">
+          <div class="stat-label">Recibos posteriores</div>
+          <div class="stat-value" id="regularReceiptUnit">—</div>
+          <div class="stat-help money gold-money" id="regularReceiptNow">—</div>
+        </article>
+        <article class="stat">
+          <div class="stat-label" id="maturityLabel">Al finalizar el plazo</div>
+          <div class="stat-value" id="maturityUnit">—</div>
+          <div class="stat-help money" id="maturityEstimate">—</div>
+        </article>
+      </section>
+
+      <section class="section impact-section" id="impacto">
+        <div class="section-head">
+          <div>
+            <h2>Una gran protección desde el inicio</h2>
+            <p class="section-copy">Con la póliza emitida, pagada y vigente, la protección comienza desde el inicio de vigencia. La gráfica contrasta el primer pago con el capital protegido.</p>
+          </div>
+          <span class="badge" style="background:rgba(212,175,55,.18);color:#f6dc7b;border:1px solid rgba(212,175,55,.4)">Contraste visual</span>
+        </div>
+        <div class="impact-grid">
+          <div class="impact-story">
+            <div class="impact-card">
+              <span>Pago inicial mensual</span>
+              <strong class="money" id="impactFirstPayment">—</strong>
+              <small>Una aportación pequeña frente a la protección contratada.</small>
+            </div>
+            <div class="impact-card gold">
+              <span>Protección básica desde el inicio</span>
+              <strong class="money" id="impactInitialProtection">—</strong>
+              <small id="impactUnitNote">Equivalente de la suma asegurada al valor actual.</small>
+            </div>
+            <div class="impact-ratio" id="impactRatio">—</div>
+          </div>
+          <div class="chart-shell">
+            <div class="chart-title-row"><strong>Pago inicial vs. protección</strong><span id="chartTermLabel">Proyección</span></div>
+            <div id="protectionChart" aria-label="Gráfico de crecimiento de la protección"></div>
+          </div>
+        </div>
+        <p class="legal" style="color:#bdcbd8;margin:16px 0 0">Los equivalentes y proyecciones son informativos. La cobertura procede conforme a la póliza emitida, su vigencia, condiciones, exclusiones y comprobación del siniestro.</p>
+      </section>
+
+      <section class="section" id="unitSection">
+        <div class="section-head">
+          <div>
+            <h2 id="unitTitle">La UDI, explicada sin complicaciones</h2>
+            <p class="section-copy" id="unitExplanation"><strong>Una UDI es una unidad de valor que se ajusta con la inflación.</strong> Por eso, aunque la cantidad en UDI no cambie, su equivalente en pesos puede aumentar.</p>
+          </div>
+          <span class="badge" id="unitBadge">Consulta automática</span>
+        </div>
+
+        <div class="udi-panel">
+          <div class="udi-now">
+            <div class="stat-label" id="currentUnitLabel">Valor actual de la unidad</div>
+            <div class="udi-number money" id="currentUdi">—</div>
+            <div class="mini" id="currentUdiDate">—</div>
+            <div class="auto-row" id="officialIndicator"><span class="pulse"></span> Fuente oficial</div>
+            <div class="formula" style="margin-top:18px"><strong>¿Cómo se proyecta?</strong><br><span id="formulaText" style="color:#dce8f5">Tomamos el valor actual y aplicamos el crecimiento anual estimado de manera mensual.</span></div>
+          </div>
+
+          <div class="slider-card">
+            <div class="range-line">
+              <div>
+                <div class="range-title">Explora tu pago mensual</div>
+                <div class="mini" id="sliderHelp">Desliza para ver cualquier mes del plazo.</div>
+              </div>
+              <span class="badge" id="selectedMonthLabel">Mes 1</span>
+            </div>
+            <input id="monthSlider" type="range" min="0" max="179" value="0" step="1" aria-label="Mes de la póliza" />
+            <div class="payment-display">
+              <div class="paybox">
+                <span class="mini" id="sliderUnitLabel">Valor proyectado de la unidad</span>
+                <b class="money" id="sliderUdi">—</b>
+              </div>
+              <div class="paybox">
+                <span class="mini">Pago mensual proyectado</span>
+                <b class="money" id="sliderPayment">—</b>
+                <span class="mini" id="sliderPaymentUdi">—</span>
+              </div>
+            </div>
+            <p class="legal" style="margin:14px 0 0">Los recibos reales pueden variar por ajustes de la aseguradora, forma de pago, endosos o cambios contractuales.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="proteccion">
+        <div class="section-head">
+          <div>
+            <h2>La protección que acompaña tu plan</h2>
+            <p class="section-copy">Además del capital principal, revisa las coberturas adicionales incluidas en la cotización.</p>
+          </div>
+        </div>
+
+        <div class="benefit-grid">
+          <article class="benefit green" id="waiverCard">
+            <div class="icon" aria-hidden="true">✓</div>
+            <h3 id="waiverTitle">Exención de primas por invalidez</h3>
+            <p id="waiverText">—</p>
+            <div class="benefit-amount">Tú dejas de pagar</div>
+            <div class="mini">Sujeto a dictamen, requisitos, periodo de espera y exclusiones de la póliza.</div>
+          </article>
+
+          <article class="benefit" id="disabilityCard">
+            <div class="icon" aria-hidden="true">$</div>
+            <h3 id="disabilityTitle">Pago por invalidez</h3>
+            <p id="disabilityText">—</p>
+            <div class="benefit-amount" id="disabilityUnit">—</div>
+            <div class="mini money gold-money" id="disabilityNow">—</div>
+          </article>
+
+          <article class="benefit comparison-card">
+            <div class="icon" aria-hidden="true" style="background:#fff1bd;color:#7a5a00">↗</div>
+            <h3>Lo que aportas vs. lo que recibes</h3>
+            <p>Comparación nominal estimada con los datos confirmados de la cotización.</p>
+            <div class="comparison-list">
+              <div class="comparison-row"><span>Aportación total proyectada</span><strong class="money" id="comparisonContributed">—</strong></div>
+              <div class="comparison-row"><span>Capital proyectado al final</span><strong class="money" id="comparisonReceived">—</strong></div>
+            </div>
+            <div class="comparison-percent" id="comparisonPercent">—</div>
+            <div class="mini" id="comparisonGain" style="margin-top:8px;text-align:center">—</div>
+          </article>
+        </div>
+
+        <div class="callout accident-callout" id="accidentCard">
+          <div aria-hidden="true" style="font-size:1.3rem">2×</div>
+          <div><strong id="accidentTitle">Beneficio adicional por muerte accidental</strong><span id="accidentText">—</span> <span class="money gold-money" id="doubleNow"></span></div>
+        </div>
+
+        <div id="otherCoverages" class="coverage-extra"></div>
+
+        <div class="callout">
+          <div aria-hidden="true">!</div>
+          <div><strong>Importante</strong>Esta explicación simplifica la cotización. Para reclamar una cobertura siempre se revisan la carátula, condiciones generales, endosos, exclusiones y documentación del siniestro.</div>
+        </div>
+      </section>
+
+      <section class="section" id="milestoneSection">
+        <div class="section-head">
+          <div>
+            <h2>Tu plan visto en momentos clave</h2>
+            <p class="section-copy" id="milestoneCopy">Valores proyectados en moneda nacional y datos contractuales en la unidad original.</p>
+          </div>
+        </div>
+        <div class="milestones" id="milestones"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Al terminar el plazo</h2>
+            <p class="section-copy" id="finalCopy">Si la póliza permanece vigente y se cumplen las condiciones, el capital principal proyectado sería:</p>
+          </div>
+          <span class="badge">Meta del plan</span>
+        </div>
+        <div class="udi-now" style="text-align:center">
+          <div class="stat-label">Capital proyectado en moneda nacional</div>
+          <div class="udi-number money gold-money" id="finalCapital">—</div>
+          <div class="mini"><span id="finalUnitAmount">—</span> · Unidad proyectada: <span id="finalUdi">—</span></div>
+        </div>
+      </section>
+
+      <section class="advisor">
+        <div>
+          <h2 id="advisorName">Pepe Leyva</h2>
+          <p><span id="advisorSubtitle">Especialista en Planes de Vida</span><br>Cualquier duda, avísame. Te ayudo a revisar cada parte antes de tomar una decisión.</p>
+        </div>
+        <a class="cta" id="whatsappCta" href="#" target="_blank" rel="noopener">Mándame WHA</a>
+      </section>
+
+      <footer>
+        <p id="footerMeta">Herramienta informativa basada en una cotización.</p>
+        <p>Los valores futuros son proyecciones y no sustituyen la documentación contractual.</p>
+      </footer>
+    </main>
+
+    <div class="sticky-cta"><a class="cta" id="stickyWhatsapp" href="#" target="_blank" rel="noopener">Mándame WHA</a></div>
+  </div>
+
+  <script src="/assets/quote.js" defer></script>
+</body>
+</html>
