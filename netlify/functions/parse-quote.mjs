@@ -89,8 +89,8 @@ export default async (request) => {
             {
               type: "input_file",
               filename,
-              file_data: base64,
-              detail: "high",
+              // OpenAI requiere un Data URL completo, no solo el texto Base64.
+              file_data: `data:application/pdf;base64,${base64}`,
             },
           ],
         },
@@ -115,7 +115,7 @@ export default async (request) => {
       ok: true,
       data: extracted,
       pdfStored: false,
-      processingMethod: "inline_base64",
+      processingMethod: "inline_pdf_data_url",
     });
   } catch (error) {
     console.error("parse-quote error", {
