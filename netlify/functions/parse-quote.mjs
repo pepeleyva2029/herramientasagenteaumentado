@@ -46,8 +46,10 @@ export default async (request) => {
 
     // Se inicia como trabajo en segundo plano para evitar el límite de 60 segundos de Netlify.
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+      model: process.env.OPENAI_BACKGROUND_MODEL || "gpt-5.5",
       background: true,
+      store: true,
+      reasoning: { effort: "low" },
       max_output_tokens: 7000,
       input: [
         {
@@ -92,7 +94,7 @@ export default async (request) => {
       ok: true,
       jobId: response.id,
       status: response.status,
-      message: "La cotización se está procesando.",
+      message: "La cotización se está procesando con un modelo compatible con segundo plano.",
     }, 202);
   } catch (error) {
     console.error("parse-quote start error", {
