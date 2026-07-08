@@ -1,5 +1,6 @@
 import OpenAI from "openai";
-import { getUser, verifyRequestOrigin } from "@netlify/identity";
+import { verifyRequestOrigin } from "@netlify/identity";
+import { getAuthenticatedUser } from "./_lib/auth.mjs";
 import { json, errorResponse } from "./_lib/http.mjs";
 import { quoteJsonSchema, applyBusinessDefaults } from "./_lib/quote-schema.mjs";
 
@@ -7,7 +8,7 @@ const MAX_BYTES = 4 * 1024 * 1024;
 
 export default async (request) => {
   try {
-    const user = await getUser();
+    const user = await getAuthenticatedUser(request);
     if (!user) return json({ ok: false, error: "Inicia sesión para analizar cotizaciones." }, 401);
 
     verifyRequestOrigin(request);

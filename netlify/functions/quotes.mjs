@@ -1,11 +1,12 @@
-import { getUser, verifyRequestOrigin } from "@netlify/identity";
+import { verifyRequestOrigin } from "@netlify/identity";
+import { getAuthenticatedUser } from "./_lib/auth.mjs";
 import { json, errorResponse, makeSlug, sanitizeSlug } from "./_lib/http.mjs";
 import { getQuoteRecord, listQuoteRecords, setQuoteRecord } from "./_lib/store.mjs";
 import { applyBusinessDefaults } from "./_lib/quote-schema.mjs";
 
 export default async (request) => {
   try {
-    const user = await getUser();
+    const user = await getAuthenticatedUser(request);
     if (!user) return json({ ok: false, error: "No autorizado." }, 401);
 
     const url = new URL(request.url);
