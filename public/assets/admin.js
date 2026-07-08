@@ -60,17 +60,22 @@
   $('extractBtn').addEventListener('click', async () => {
     if (!selectedPdf) return setStatus('extractStatus', 'Primero selecciona un PDF.', 'warn');
     try {
-      busy(true, 'Leyendo la cotización con IA…');
+      busy(true, 'Enviando la cotización para análisis…');
       const dataBase64 = await fileToDataUrl(selectedPdf);
       const response = await authFetch('/api/parse-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filename: selectedPdf.name, mimeType: selectedPdf.type || 'application/pdf', dataBase64 })
       });
-      const payload = await response.json();
-      if (!response.ok || !payload.ok) throw new Error(payload.error || 'No fue posible analizar el PDF.');
+      const payload = await readJsonResponse(response);
+      if (!response.ok || !payload.ok || !payload.jobId) {
+        throw new Error(payload.error || 'No fue posible iniciar el análisis del PDF.');
+      }
+
+      setStatus('extractStatus', 'La IA está leyendo la cotización. Esto puede tardar entre 30 segundos y 3 minutos…', 'info');
+      const result = await pollQuoteJob(payload.jobId);
       currentRecord = null;
-      loadIntoForm(payload.data);
+      loadIntoForm(result.data);
       setStatus('extractStatus', 'Datos extraídos. Revisa y corrige antes de publicar.', 'ok');
       markStep(2);
     } catch (error) {
@@ -79,6 +84,43 @@
       busy(false);
     }
   });
+
+  async function pollQuoteJob(jobId) {
+    const startedAt = Date.now();
+    const maxWaitMs = 5 * 60 * 1000;
+    let attempt = 0;
+
+    while (Date.now() - startedAt < maxWaitMs) {
+      attempt += 1;
+      await sleep(attempt === 1 ? 1500 : 2500);
+      const response = await authFetch(`/api/parse-quote-status?id=${encodeURIComponent(jobId)}`, {
+        method: 'GET',
+        cache: 'no-store'
+      });
+      const payload = await readJsonResponse(response);
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || 'El análisis no pudo completarse.');
+      }
+      if (payload.done && payload.data) return payload;
+      setStatus('extractStatus', `Analizando la cotización… ${Math.round((Date.now() - startedAt) / 1000)} s`, 'info');
+    }
+
+    throw new Error('El análisis está tardando más de 5 minutos. Intenta nuevamente.');
+  }
+
+  async function readJsonResponse(response) {
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      const preview = text.replace(/\s+/g, ' ').slice(0, 140);
+      throw new Error(`El servidor devolvió una respuesta inesperada (${response.status}). ${preview || 'Sin detalle.'}`);
+    }
+  }
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   $('demoBtn').addEventListener('click', async () => {
     try {
@@ -106,6 +148,11 @@
   $('publishBtn').addEventListener('click', () => save('published'));
   $('copyUrlBtn').addEventListener('click', copyPublicUrl);
   $('restoreVersionBtn').addEventListener('click', restoreVersion);
+  $('refreshUdiBtn').addEventListener('click', () => refreshOfficialUdi());
+  $('currency').addEventListener('change', () => {
+    if ($('currency').value === 'UDI') refreshOfficialUdi({ silent: true });
+    else setUdiStatus('La consulta oficial solo aplica cuando la moneda es UDI.', '');
+  });
 
   function loadIntoForm(inputData) {
     currentData = structuredClone(inputData);
@@ -162,6 +209,41 @@
     populateVersions(currentRecord?.versions || []);
     updatePublicUrl(currentRecord?.slug, currentRecord?.status);
     $('quoteForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if ($('currency').value === 'UDI') refreshOfficialUdi({ silent: true });
+    else setUdiStatus('La consulta oficial solo aplica cuando la moneda es UDI.', '');
+  }
+
+  async function refreshOfficialUdi({ silent = false } = {}) {
+    if ($('currency').value !== 'UDI') {
+      setUdiStatus('La consulta oficial solo aplica cuando la moneda es UDI.', '');
+      return;
+    }
+    const button = $('refreshUdiBtn');
+    button.disabled = true;
+    if (!silent) setUdiStatus('Consultando el valor oficial…', '');
+    try {
+      const fallback = $('baseUnitValue').value || '';
+      const response = await fetch(`/api/udi?fallback=${encodeURIComponent(fallback)}`, { cache: 'no-store' });
+      const payload = await response.json();
+      if (!payload.value) throw new Error(payload.warning || 'No se recibió un valor de UDI.');
+      $('baseUnitValue').value = Number(payload.value).toFixed(6);
+      const date = payload.date ? ` · ${formatDate(payload.date)}` : '';
+      if (payload.official) {
+        setUdiStatus(`Oficial: $${Number(payload.value).toFixed(6)}${date} · ${payload.source}`, 'ok');
+      } else {
+        setUdiStatus(payload.warning || 'Se conserva el valor confirmado manualmente.', 'warn');
+      }
+    } catch (error) {
+      setUdiStatus(`${error.message} Captura o confirma el valor manualmente.`, 'error');
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  function setUdiStatus(message, type) {
+    const node = $('udiStatus');
+    node.textContent = message;
+    node.className = `udi-status ${type || 'muted'}`;
   }
 
   function collectForm() {
@@ -324,6 +406,7 @@
     if (!d.quote.termYears) missing.push('plazo');
     if (!d.benefits.sumAssured) missing.push('suma asegurada');
     if (!d.payments.firstReceipt) missing.push('primer recibo');
+    if (d.quote.currency === 'UDI' && !d.projection.baseUnitValue) missing.push('valor actual de la UDI');
     if (missing.length) throw new Error(`Confirma: ${missing.join(', ')}.`);
   }
 

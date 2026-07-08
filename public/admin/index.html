@@ -52,7 +52,7 @@
             <div><div class="eyebrow">MVP · MAPFRE primero</div><h1>Genera una herramienta inteligente</h1><p class="muted">El PDF se usa solo durante la extracción. No se guarda en Netlify Blobs.</p></div>
             <button id="newBtn" class="btn btn-soft">Nueva cotización</button>
           </div>
-          <div class="privacy-note">Privacidad: el PDF no se almacena en la base de datos. Cuando se usa la IA, se elimina el archivo temporal de OpenAI al terminar la extracción.</div>
+          <div class="privacy-note">Privacidad: el PDF no se almacena en Netlify. OpenAI lo procesa temporalmente en segundo plano y la respuesta se elimina al terminar la extracción.</div>
         </section>
 
         <section class="section" id="uploadSection">
@@ -90,7 +90,11 @@
               <div class="field"><label>Moneda</label><select id="currency"><option>UDI</option><option>MXN</option><option>USD</option><option>OTRA</option></select></div>
               <div class="field"><label>Plazo del seguro (años)</label><input id="termYears" type="number" min="1"></div>
               <div class="field"><label>Plazo de pago (años)</label><input id="paymentTermYears" type="number" min="1"></div>
-              <div class="field"><label>Valor base de la unidad</label><input id="baseUnitValue" type="number" step="0.0001"></div>
+              <div class="field">
+                <label>Valor actual de la UDI</label>
+                <div class="field-with-button"><input id="baseUnitValue" type="number" step="0.000001"><button id="refreshUdiBtn" type="button" class="btn btn-soft btn-sm">Consultar oficial</button></div>
+                <div id="udiStatus" class="udi-status muted">Se consultará automáticamente en el SIDOF.</div>
+              </div>
               <div class="field"><label>Crecimiento anual (%)</label><input id="annualGrowthRate" type="number" step="0.1"></div>
               <div class="field"><label>Tipo de cambio manual</label><input id="manualUnitRate" type="number" step="0.0001"></div>
               <div class="field"><label>Etiqueta cambio manual</label><input id="manualUnitLabel" placeholder="Ej. Tipo de cambio capturado"></div>
