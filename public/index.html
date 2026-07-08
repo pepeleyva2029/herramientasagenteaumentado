@@ -3,10 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="refresh" content="0;url=/admin/">
+  <meta name="theme-color" content="#152A44">
   <title>Herramientas inteligentes para ventas</title>
+  <script>
+    // Conserva los tokens de Netlify Identity enviados en la URL
+    // (invitación, confirmación o recuperación) al abrir el panel privado.
+    const destino = new URL('/admin/', window.location.origin);
+    destino.search = window.location.search;
+    destino.hash = window.location.hash;
+    window.location.replace(destino.toString());
+  </script>
 </head>
 <body>
-  <p>Abriendo el <a href="/admin/">panel privado</a>…</p>
+  <p>Abriendo el <a id="adminLink" href="/admin/">panel privado</a>…</p>
+  <script>
+    const enlace = document.getElementById('adminLink');
+    enlace.href = '/admin/' + window.location.search + window.location.hash;
+  </script>
 </body>
 </html>
